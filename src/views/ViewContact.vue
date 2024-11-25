@@ -5,18 +5,22 @@
       <p><strong>Name:</strong> {{ contact.name }}</p>
       <p><strong>Email:</strong> {{ contact.email }}</p>
       <p><strong>Phone:</strong> {{ contact.phone }}</p>
-      <button @click="goBack" class="mt-4 bg-blue-500 text-white px-4 py-2 rounded">Back</button>
+      <Button variant="secondary" @click="goBack" class="mt-4 w-max">Back</Button>
     </div>
     <div v-else>Loading...</div>
   </div>
 </template>
 
-<script lang="js">
+<script>
 import { defineComponent, ref, onMounted } from 'vue';
 import { useContactStore } from '../store/contactStore.js';
 import { useRoute, useRouter } from 'vue-router';
+import Button from '@/components/Button/Button.vue';
 
 export default defineComponent({
+  components: {
+    Button
+  },
   setup() {
     const route = useRoute();
     const router = useRouter();

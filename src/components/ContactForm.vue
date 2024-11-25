@@ -6,8 +6,8 @@
         v-model="contact.name"
         type="text"
         class="mt-1 w-full px-4 py-2 border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring focus:ring-green-200"
-        required
       />
+      <span v-if="nameError" class="text-xs text-red-700">{{ nameError }}</span>
     </div>
     <div>
       <label class="block text-sm font-medium text-gray-600">Email</label>
@@ -15,8 +15,8 @@
         v-model="contact.email"
         type="email"
         class="mt-1 w-full px-4 py-2 border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring focus:ring-green-200"
-        required
       />
+      <span v-if="emailError" class="text-xs text-red-700">{{ emailError }}</span>
     </div>
     <div>
       <label class="block text-sm font-medium text-gray-600">Phone</label>
@@ -25,19 +25,10 @@
         type="text"
         class="mt-1 w-full px-4 py-2 border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring focus:ring-green-200"
       />
+      <span v-if="phoneError" class="text-xs text-red-700">{{ phoneError }}</span>
     </div>
-    <button
-      type="submit"
-      class="w-full bg-green-500 text-white py-2 rounded-lg shadow hover:bg-green-600 focus:outline-none focus:ring focus:ring-green-300"
-    >
-      Save Changes
-    </button>
-    <button
-      @click="router.push('/')"
-      class="w-full bg-blue-500 text-white py-2 rounded-lg shadow hover:bg-blue-600 focus:outline-none focus:ring focus:ring-blue-300"
-    >
-      Back
-    </button>
+    <Button type="submit" :disabled="loading">Save Changes</Button>
+    <Button variant="secondary" :disabled="loading" @click="router.push('/')">Back</Button>
   </form>
 </template>
 
@@ -47,6 +38,7 @@ import {computed, ref, onMounted} from "vue";
 import {email, required} from "@vuelidate/validators";
 import useVuelidate from "@vuelidate/core";
 import {useRouter} from "vue-router";
+import Button from '@/components/Button/Button.vue';
 
 export default {
   name: "ContactForm",
@@ -55,8 +47,15 @@ export default {
       type: Object,
       required: false,
     },
+    loading: {
+      type: Boolean,
+      required: false,
+    },
   },
   emits: ['formSubmitted'],
+  components: {
+    Button,
+  },
   setup(props, ctx) {
     const contact = ref({ name: '', email: '', phone: '' });
     const router = useRouter();
